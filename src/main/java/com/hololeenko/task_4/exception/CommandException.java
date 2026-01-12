@@ -1,0 +1,18 @@
+package com.hololeenko.task_4.exception;
+
+public class CommandException extends Exception {
+    public CommandException(String message) {
+        super(message);
+    }
+
+    public CommandException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public CommandException(Throwable cause) {
+        super(cause);
+    }
+
+    public CommandException() {
+    }
+}
