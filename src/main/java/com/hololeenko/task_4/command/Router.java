@@ -2,11 +2,11 @@ package com.hololeenko.task_4.command;
 
 public class Router {
 
-    private  String page = "index.jsp";
+    private  String page;
 
     private Type type = Type.FORWARD;
 
-    enum Type{
+    public enum Type{
         FORWARD,
         REDIRECT;
     }
@@ -24,11 +24,19 @@ public class Router {
         return page;
     }
 
+    public Type getType() {
+        return type;
+    }
+
     public void setPage(String page) {
         this.page = page;
     }
 
     public void setRedirect() {
         this.type = Type.REDIRECT;
+    }
+
+    public void setForward() {
+        this.type = Type.FORWARD;
     }
 }

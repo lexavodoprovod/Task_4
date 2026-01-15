@@ -1,21 +1,21 @@
 package com.hololeenko.task_4.model.entity;
 
+import java.util.Objects;
+
 public class User extends AbstractEntity {
 
     private String name;
     private String login;
     private String password;
-    private UserRole role;
+    private UserRole role = UserRole.USER;
 
     public User() {
-
     }
 
-    public User(String name, String login, String password,  UserRole role) {
+    public User(String name, String login, String password) {
         this.name = name;
         this.login = login;
         this.password = password;
-        this.role = role;
     }
 
     public String getName() {
@@ -46,8 +46,45 @@ public class User extends AbstractEntity {
         return role;
     }
 
-    public void setRole(UserRole role) {
-        this.role = role;
+    public void setAdminRole() {
+        this.role = UserRole.ADMIN;
+    }
+
+    public void serUserRole() {
+        this.role = UserRole.USER;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+       if(this == o){
+           return true;
+       }
+
+       if(o == null){
+           return false;
+       }
+
+       if(getClass() != o.getClass()){
+           return false;
+       }
+
+       User user = (User) o;
+
+       return name.equals(user.name) && login.equals(user.login) && password.equals(user.password);
+    }
+
+    @Override
+    public int hashCode() {
+
+        int total = 31;
+
+        total = total * 31 + (name != null ? name.hashCode() : 0 );
+
+        total = total * 31 + (login != null ? login.hashCode() : 0);
+
+        total = total * 31 + (password != null ? password.hashCode() : 0);
+
+        return total;
     }
 
     @Override

@@ -12,6 +12,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,11 +23,14 @@ public class UserDaoImpl implements UserDao<User> {
 
     private static UserDaoImpl instance = new UserDaoImpl();
 
-    private static final String SQL_FIND_USER = "SELECT * FROM users WHERE user_email = ?";
+    private static final String SQL_FIND_USER =
+            "SELECT * FROM users WHERE user_email = ?";
 
+    private static final String SQL_FIND_ALL_USERS =
+            "SELECT * FROM users";
 
-
-
+    private static final String SQL_CREATE_USER =
+            "INSERT INTO users (user_name, user_email, user_password, user_role) VALUES (?, ?, ?, ?)";
 
     private UserDaoImpl() {
     }
@@ -38,7 +42,27 @@ public class UserDaoImpl implements UserDao<User> {
 
     @Override
     public List<User> findAll() throws DaoException {
-        return List.of();
+
+        Connection connection = ConnectionPool.getInstance().getConnection();
+
+        List<User> users = new ArrayList<>();
+
+        try(PreparedStatement preparedStatement = connection.prepareStatement(SQL_FIND_ALL_USERS)){
+            try(ResultSet resultSet = preparedStatement.executeQuery()){
+                while(resultSet.next()){
+                    User user = userMapper.map(resultSet);
+                    users.add(user);
+                }
+            }
+
+        }catch(SQLException e){
+            logger.error("Exception in findAll");
+            throw new DaoException("SQl error findAllUsers", e);
+        }finally {
+            ConnectionPool.getInstance().releaseConnection(connection);
+        }
+
+        return users;
     }
 
     @Override
@@ -59,7 +83,7 @@ public class UserDaoImpl implements UserDao<User> {
             }
         }catch (SQLException e){
             logger.error("Exception in findUserByLogin",e);
-            throw new DaoException("SQL Error find user by login");
+            throw new DaoException("SQL Error in findUserByLogin");
         }finally {
             ConnectionPool.getInstance().releaseConnection(connection);
         }
@@ -68,7 +92,26 @@ public class UserDaoImpl implements UserDao<User> {
 
     @Override
     public boolean createUser(User user) throws DaoException {
-        return false;
+        Connection connection = ConnectionPool.getInstance().getConnection();
+
+        try(PreparedStatement preparedStatement = connection.prepareStatement(SQL_CREATE_USER)){
+            logger.info("Use preparedStatement in createUser ");
+            preparedStatement.setString(1, user.getName());
+            preparedStatement.setString(2, user.getLogin());
+            preparedStatement.setString(3, user.getPassword());
+            preparedStatement.setString(4, user.getRole().toString());
+
+            logger.info("This message before executeUpdate in createUser ");
+            preparedStatement.executeUpdate();
+
+        }catch (SQLException e){
+            logger.error("Exception in createUser",e);
+            throw new DaoException("SQL Error in createUser");
+        }finally {
+            ConnectionPool.getInstance().releaseConnection(connection);
+        }
+
+        return true;
     }
 
     @Override

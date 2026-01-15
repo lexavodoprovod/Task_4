@@ -1,15 +1,13 @@
 package com.hololeenko.task_4.command;
 
-import com.hololeenko.task_4.command.impl.AddUserCommand;
-import com.hololeenko.task_4.command.impl.DefaultCommand;
-import com.hololeenko.task_4.command.impl.LoginCommand;
-import com.hololeenko.task_4.command.impl.LogoutCommand;
+import com.hololeenko.task_4.command.impl.*;
 
 public enum CommandType {
     ADD_USER(new AddUserCommand()),
     LOGIN(new LoginCommand()),
     LOGOUT(new LogoutCommand()),
-    DEFAULT(new DefaultCommand());
+    DEFAULT(new DefaultCommand()),
+    GO_TO_REGISTRATION(new GoToRegistrationCommand());
 
     Command command;
 

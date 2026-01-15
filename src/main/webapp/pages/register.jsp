@@ -11,15 +11,17 @@
     <title>Register</title>
 </head>
 <body>
-    <form action="register.do">
+    <form action="controller">
         <input type="hidden" name="command" value="add_user"/>
-        Name: <input type="text" name="userName" value=""/>
+        Name: <input type="text" name="register_userName" value=""/>
         <br/>
-        Login: <input type="text" name ="login" value=""/>
+        Login: <input type="text" name ="register_login" value=""/>
         <br/>
-        Password: <input type="password" name="pass" value=""/>
+        Password: <input type="password" name="register_pass" value=""/>
         <br/>
-        <input type="submit" name="regUse" value="Register user"/>
+        <input type="submit" name="regUser" value="Register user"/>
+        <br/>
+        ${register_msg}
     </form>
 </body>
 </html>

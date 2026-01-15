@@ -6,8 +6,10 @@ import org.apache.logging.log4j.Logger;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
+import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Enumeration;
 import java.util.Properties;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
@@ -20,7 +22,7 @@ public class ConnectionPool {
     private static ConnectionPool instance;
 
     private static  final ReentrantLock lock = new ReentrantLock();
-
+    
     private BlockingQueue<Connection> free;
     private BlockingQueue<Connection> used;
 
@@ -133,6 +135,25 @@ public class ConnectionPool {
             }
         }
 
-        //Дерегестрировать драйвер
+//        try {
+//            Driver closeDriver = DriverManager.getDriver(url);
+//            DriverManager.deregisterDriver(closeDriver);
+//            logger.info("Driver deregistered successfully");
+//        } catch (SQLException e) {
+//            throw new RuntimeException(e);
+//        }
+
+        Enumeration<Driver> drivers = DriverManager.getDrivers();
+        while(drivers.hasMoreElements()){
+            Driver driver = drivers.nextElement();
+            try{
+                DriverManager.deregisterDriver(driver);
+                logger.info("Driver deregistered successfully");
+            }catch (SQLException e){
+                logger.error("Error deregistering driver {}", driver, e);
+            }
+        }
+
+
     }
 }
