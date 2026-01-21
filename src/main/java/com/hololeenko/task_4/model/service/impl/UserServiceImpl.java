@@ -15,7 +15,7 @@ public class UserServiceImpl implements UserService {
 
     private static final Logger logger = LogManager.getLogger(UserServiceImpl.class);
 
-    private static UserServiceImpl instance = new UserServiceImpl();
+    private static final UserServiceImpl instance = new UserServiceImpl();
 
     private UserServiceImpl() {
     }
@@ -77,7 +77,7 @@ public class UserServiceImpl implements UserService {
         if(optionalUser.isEmpty()){
             User user = new User(userName, login, password);
             try {
-                success = userDao.createUser(user);
+                success = userDao.create(user);
             } catch (DaoException e) {
                 throw new ServiceException(e);
             }

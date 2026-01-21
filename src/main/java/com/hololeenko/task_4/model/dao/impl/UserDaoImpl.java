@@ -1,6 +1,7 @@
 package com.hololeenko.task_4.model.dao.impl;
 
 import com.hololeenko.task_4.exception.DaoException;
+import com.hololeenko.task_4.model.dao.BaseDao;
 import com.hololeenko.task_4.model.dao.UserDao;
 import com.hololeenko.task_4.model.entity.User;
 import com.hololeenko.task_4.model.mapper.impl.UserMapperImpl;
@@ -16,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class UserDaoImpl implements UserDao<User> {
+public class UserDaoImpl implements UserDao, BaseDao<User> {
 
     private static final Logger logger = LogManager.getLogger(UserDaoImpl.class);
     private static final UserMapperImpl userMapper = new UserMapperImpl();
@@ -91,7 +92,7 @@ public class UserDaoImpl implements UserDao<User> {
     }
 
     @Override
-    public boolean createUser(User user) throws DaoException {
+    public boolean create(User user) throws DaoException {
         Connection connection = ConnectionPool.getInstance().getConnection();
 
         try(PreparedStatement preparedStatement = connection.prepareStatement(SQL_CREATE_USER)){
@@ -115,7 +116,7 @@ public class UserDaoImpl implements UserDao<User> {
     }
 
     @Override
-    public boolean updateUser(User user) throws DaoException {
+    public boolean update(User user) throws DaoException {
         return false;
     }
 }
