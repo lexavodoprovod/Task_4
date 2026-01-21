@@ -75,7 +75,11 @@ public class UserServiceImpl implements UserService {
 
 
         if(optionalUser.isEmpty()){
-            User user = new User(userName, login, password);
+            User user = new User.UserBuilder()
+                    .setName(userName)
+                    .setLogin(login)
+                    .setPassword(password)
+                    .build();
             try {
                 success = userDao.create(user);
             } catch (DaoException e) {
