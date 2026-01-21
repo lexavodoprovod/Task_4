@@ -9,13 +9,41 @@ public class User extends AbstractEntity {
     private String password;
     private UserRole role = UserRole.USER;
 
-    public User() {
+
+    private User(UserBuilder userBuilder) {
+        this.name = userBuilder.name;
+        this.login = userBuilder.login;
+        this.password = userBuilder.password;
     }
 
-    public User(String name, String login, String password) {
-        this.name = name;
-        this.login = login;
-        this.password = password;
+    public static class UserBuilder{
+        private String name;
+        private String login;
+        private String password;
+
+        public UserBuilder setName(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public UserBuilder setLogin(String login) {
+            this.login = login;
+            return this;
+        }
+
+        public UserBuilder setPassword(String password) {
+            this.password = password;
+            return this;
+        }
+
+        public User build(){
+            if(name == null || login == null || password == null){
+                throw new IllegalStateException("Missing required parameters for Database \"User\"");
+            }
+            return new User(this);
+        }
+
+
     }
 
     public String getName() {
