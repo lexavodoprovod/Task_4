@@ -21,11 +21,12 @@ public class UserMapperImpl implements EntityMapper<User> {
 
     @Override
     public User map(ResultSet rs) throws SQLException {
-        User user = new User();
-        user.setId(rs.getInt(ID));
-        user.setName(rs.getString(NAME));
-        user.setLogin(rs.getString(EMAIL));
-        user.setPassword(rs.getString(PASSWORD));
+        User user = new User.UserBuilder()
+                .setId(rs.getInt(ID))
+                .setName(rs.getString(NAME))
+                .setLogin(rs.getString(EMAIL))
+                .setPassword(rs.getString(PASSWORD))
+                .build();
         logger.info("Successfully called UserMapperImpl for User: {}", user.getLogin());
         return user;
     }
