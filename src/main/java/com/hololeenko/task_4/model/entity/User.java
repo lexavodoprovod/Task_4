@@ -1,5 +1,7 @@
 package com.hololeenko.task_4.model.entity;
 
+import com.hololeenko.task_4.model.service.UserService;
+
 import java.util.Objects;
 
 public class User extends AbstractEntity {
@@ -11,15 +13,22 @@ public class User extends AbstractEntity {
 
 
     private User(UserBuilder userBuilder) {
+        super(userBuilder.id);
         this.name = userBuilder.name;
         this.login = userBuilder.login;
         this.password = userBuilder.password;
     }
 
     public static class UserBuilder{
+        private int id;
         private String name;
         private String login;
         private String password;
+
+        public UserBuilder setId(int id){
+            this.id = id;
+            return this;
+        }
 
         public UserBuilder setName(String name) {
             this.name = name;
@@ -37,7 +46,7 @@ public class User extends AbstractEntity {
         }
 
         public User build(){
-            if(name == null || login == null || password == null){
+            if(id < 0 || name == null || login == null || password == null){
                 throw new IllegalStateException("Missing required parameters for Database \"User\"");
             }
             return new User(this);
