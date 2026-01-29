@@ -11,22 +11,20 @@ import jakarta.servlet.http.HttpSession;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import static com.hololeenko.task_4.command.ConstantPagesPath.*;
+import static com.hololeenko.task_4.command.ConstantAttribute.*;
+
+
 public class AddUserCommand implements Command {
 
     private static final Logger logger = LogManager.getLogger(AddUserCommand.class);
-
-
-    private static final String REGISTRATION_PAGE = "/pages/register.jsp";
-    private static final String MAIN_PAGE = "/pages/main.jsp";
-
-
     @Override
     public Router execute(HttpServletRequest request) throws CommandException {
         logger.info("Use AddUserCommand");
 
-        String username = request.getParameter("register_userName");
-        String login = request.getParameter("register_login");
-        String password = request.getParameter("register_pass");
+        String username = request.getParameter(REGISTER_USER_NAME);
+        String login = request.getParameter(REGISTER_LOGIN);
+        String password = request.getParameter(REGISTER_PASS);
 
         UserService userService = UserServiceImpl.getInstance();
 
@@ -36,13 +34,13 @@ public class AddUserCommand implements Command {
 
         try{
             if(userService.register(username, login, password)){
-                session.setAttribute("user_name", username);
-                session.setAttribute("user_login", login);
+                session.setAttribute(USER_NAME, username);
+                session.setAttribute(USER_LOGIN, login);
 
                 router = new Router(MAIN_PAGE);
                 router.setRedirect();
             }else{
-                request.setAttribute("register_msg", "Registration Failed");
+                request.setAttribute(REGISTRATION_MESSAGE, "Registration Failed");
                 router = new Router(REGISTRATION_PAGE);
             }
         }catch (ServiceException e){

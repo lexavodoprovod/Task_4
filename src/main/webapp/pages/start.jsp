@@ -21,7 +21,7 @@
 <form action = "controller">
     <input type="hidden" name="command" value="go_to_registration"/>
     <br/>
-    <input type="submit" name="reg" value="Register"/>
+    <input type="submit" name="reg" value="Sign Up"/>
 </form>
 ${login_msg}
 </body>

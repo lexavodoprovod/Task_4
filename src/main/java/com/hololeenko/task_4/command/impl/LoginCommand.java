@@ -15,19 +15,20 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.Optional;
 
+import static com.hololeenko.task_4.command.ConstantPagesPath.*;
+import static com.hololeenko.task_4.command.ConstantAttribute.*;
+
+
 public class LoginCommand implements Command {
 
     private static final Logger logger = LogManager.getLogger();
 
-    private static final String MAIN_PAGE = "/pages/main.jsp";
-    private static final String ADMIN_PAGE = "/pages/admin.jsp";
-    private static final String START_PAGE = "/";
 
     @Override
     public Router execute(HttpServletRequest request) throws CommandException {
         logger.info("Use LoginCommand");
-        String login = request.getParameter("authenticate_login");//Выносим в константы, а лучше в отдельный класс как все параметры request
-        String password = request.getParameter("authenticate_pass");
+        String login = request.getParameter(AUTHENTICATE_LOGIN);
+        String password = request.getParameter(AUTHENTICATE_PASS);
 
         UserService userService = UserServiceImpl.getInstance();
 
@@ -40,8 +41,9 @@ public class LoginCommand implements Command {
 
             if(optionalUser.isPresent()) {
                 User user = optionalUser.get();
-                session.setAttribute("user_login", user.getLogin());
-                session.setAttribute("user_role", user.getRole());
+                session.setAttribute(USER_LOGIN, user.getLogin());
+                session.setAttribute(USER_ROLE, user.getRole());
+                session.setAttribute(USER_NAME, user.getName());
 
                 if(user.getRole().equals(UserRole.ADMIN)) {
                     router = new Router(ADMIN_PAGE);
@@ -52,7 +54,7 @@ public class LoginCommand implements Command {
                 }
 
             }else{
-                request.setAttribute("login_msg", "Invalid username or password");
+                request.setAttribute(LOGIN_MESSAGE, "Invalid username or password");
                 router = new Router(START_PAGE);
             }
         } catch (ServiceException e) {

@@ -26,7 +26,7 @@
     </form>
     <form action="logout.do">
         <input type="hidden" name="command" value="logout"/>
-        <input type="submit" name="out" value="Log in">
+        <input type="submit" name="out" value="Login">
     </form>
     <br/>
     ${register_msg}

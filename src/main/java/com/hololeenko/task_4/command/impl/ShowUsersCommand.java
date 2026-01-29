@@ -11,6 +11,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import static com.hololeenko.task_4.command.ConstantPagesPath.*;
+import static com.hololeenko.task_4.command.ConstantAttribute.*;
+
+
 
 import java.util.List;
 
@@ -18,7 +22,6 @@ public class ShowUsersCommand implements Command {
 
     private static final Logger logger = LogManager.getLogger();
 
-    private static final String ALL_USERS_PAGE = "/pages/all_users.jsp";
 
     @Override
     public Router execute(HttpServletRequest request) throws CommandException {
@@ -26,13 +29,12 @@ public class ShowUsersCommand implements Command {
         UserService userService = UserServiceImpl.getInstance();
         try {
             List<User> users = userService.getAllUsers();
-            request.setAttribute("user_list", users);
+            request.setAttribute(USER_LIST, users);
             logger.info("Set new requestAttribute user_list");
         } catch (ServiceException e) {
             throw new CommandException(e);
         }
 
-        Router router = new Router(ALL_USERS_PAGE);
-        return router;
+        return new Router(ALL_USERS_PAGE);
     }
 }

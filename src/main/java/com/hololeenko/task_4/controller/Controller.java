@@ -12,6 +12,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 
+import static com.hololeenko.task_4.command.ConstantAttribute.*;
+
 @WebServlet(name = "helloServlet", urlPatterns = {"/controller", "*.do"})
 public class Controller extends HttpServlet {
 
@@ -29,7 +31,7 @@ public class Controller extends HttpServlet {
 
     private void processRequest(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("text/html");
-        String commandStr = req.getParameter("command");
+        String commandStr = req.getParameter(COMMAND);
         Command command = CommandType.define(commandStr);
         Router router;
         try {
