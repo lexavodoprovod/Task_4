@@ -24,8 +24,11 @@ public class UserDaoImpl implements UserDao, BaseDao<User> {
 
     private static UserDaoImpl instance = new UserDaoImpl();
 
-    private static final String SQL_FIND_USER =
+    private static final String SQL_FIND_USER_BY_LOGIN =
             "SELECT * FROM users WHERE user_email = ?";
+
+    private static final String SQL_FIND_USER_BY_ID =
+            "SELECT * FROM users WHERE user_id = ?";
 
     private static final String SQL_FIND_ALL_USERS =
             "SELECT * FROM users";
@@ -68,6 +71,19 @@ public class UserDaoImpl implements UserDao, BaseDao<User> {
 
     @Override
     public Optional<User> findUserById(int id) throws DaoException {
+        Connection connection = ConnectionPool.getInstance().getConnection();
+
+        try(PreparedStatement preparedStatement = connection.prepareStatement(SQL_FIND_USER_BY_ID)){
+            preparedStatement.setInt(1, id);
+            try(ResultSet resultSet = preparedStatement.executeQuery()){
+                if(resultSet.next()){
+                    return Optional.of(userMapper.map(resultSet));
+                }
+            }
+        }catch (SQLException e){
+            logger.error("Exception in findUserById");
+            throw new DaoException("SQl error in findUserById", e);
+        }
         return Optional.empty();
     }
 
@@ -75,7 +91,7 @@ public class UserDaoImpl implements UserDao, BaseDao<User> {
     public Optional<User> findUserByLogin(String login) throws DaoException {
         Connection connection = ConnectionPool.getInstance().getConnection();
 
-        try(PreparedStatement preparedStatement = connection.prepareStatement(SQL_FIND_USER)){
+        try(PreparedStatement preparedStatement = connection.prepareStatement(SQL_FIND_USER_BY_LOGIN)){
             preparedStatement.setString(1, login);
             try(ResultSet resultSet = preparedStatement.executeQuery()){
                 if(resultSet.next()){

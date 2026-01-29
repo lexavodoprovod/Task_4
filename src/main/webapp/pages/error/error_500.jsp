@@ -16,6 +16,7 @@
     Servlet name: ${pageContext.errorData.servletName} <br/>
     Status code: ${pageContext.errorData.statusCode}<br/>
     Exception: ${pageContext.exception} <br/>
+    <a href="<%= request.getContextPath() %>/" class="btn-back">Вернуться домой</a>
     <br/><br/><br/>
 </body>
 </html>

@@ -4,6 +4,7 @@ import com.hololeenko.task_4.exception.DaoException;
 import com.hololeenko.task_4.exception.ServiceException;
 import com.hololeenko.task_4.model.dao.impl.UserDaoImpl;
 import com.hololeenko.task_4.model.entity.User;
+import com.hololeenko.task_4.model.entity.UserRole;
 import com.hololeenko.task_4.model.service.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -24,12 +25,10 @@ public class UserServiceImpl implements UserService {
         return instance;
     }
     @Override
-    public boolean authenticate(String login, String password) throws ServiceException {
+    public Optional<User> authenticate(String login, String password) throws ServiceException {
+
         UserDaoImpl userDaoImpl = UserDaoImpl.getInstance();
-        Optional<User> optionalUser = Optional.empty();
-
-        boolean success = false;
-
+        Optional<User> optionalUser;
 
         try {
             optionalUser = userDaoImpl.findUserByLogin(login);
@@ -38,30 +37,31 @@ public class UserServiceImpl implements UserService {
             throw new ServiceException(e);
         }
 
-        if(optionalUser.isPresent()){
+        if (optionalUser.isPresent()) {
             User user = optionalUser.get();
             logger.info("User with login {} was found, user_name is {}", login, user.getName());
             String userPassword = user.getPassword();
-            if(userPassword.equals(password)){
-                success = true;
+            if (userPassword.equals(password)) {
+                logger.info("Successfully logged in!");
+                return optionalUser;
             }
         }
 
-        logger.info(success ? "Successfully logged in!" : "Invalid login or password");
-
-        return success;
+        return Optional.empty();
     }
+
+
 
     @Override
     public boolean register(String userName, String login, String password) throws ServiceException {
 
-        if(userName.isEmpty() ||login.isEmpty() || password.isEmpty()){
+        if(userName.isEmpty() || login.isEmpty() || password.isEmpty()){
             return false;
         }
 
         UserDaoImpl userDao = UserDaoImpl.getInstance();
 
-        Optional<User> optionalUser = Optional.empty();
+        Optional<User> optionalUser;
 
         boolean success = false;
 
@@ -90,5 +90,21 @@ public class UserServiceImpl implements UserService {
         logger.info(success ? "Register successful!" : "Register failed");
 
         return success;
+    }
+
+    @Override
+    public List<User> getAllUsers() throws ServiceException {
+        UserDaoImpl userDaoImpl = UserDaoImpl.getInstance();
+        List<User> users;
+
+        try {
+            users = userDaoImpl.findAll();
+        } catch (DaoException e) {
+            logger.error("Exception while trying to find all users, Exception: {}", e.getMessage());
+            throw new ServiceException(e);
+        }
+
+
+        return users;
     }
 }

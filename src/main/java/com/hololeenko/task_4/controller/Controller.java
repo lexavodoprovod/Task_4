@@ -15,10 +15,7 @@ import jakarta.servlet.annotation.*;
 @WebServlet(name = "helloServlet", urlPatterns = {"/controller", "*.do"})
 public class Controller extends HttpServlet {
 
-    private static final String SEPARTOR = "/";
-
     public void init() {
-
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
@@ -39,7 +36,7 @@ public class Controller extends HttpServlet {
             router = command.execute(req);
             String page = router.getPage();
             if(router.getType() == Router.Type.REDIRECT){
-                resp.sendRedirect(page);
+                resp.sendRedirect(req.getContextPath() + page);
             }else{
                 req.getRequestDispatcher(page).forward(req, resp);
             }

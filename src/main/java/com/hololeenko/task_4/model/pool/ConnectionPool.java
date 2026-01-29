@@ -153,7 +153,5 @@ public class ConnectionPool {
                 logger.error("Error deregistering driver {}", driver, e);
             }
         }
-
-
     }
 }

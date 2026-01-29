@@ -6,11 +6,11 @@ import jakarta.servlet.http.HttpServletRequest;
 
 public class DefaultCommand implements Command {
 
-    private static final String INDEX_PAGE = "start.jsp";
+    private static final String START_PAGE = "/";
 
 
     @Override
     public Router execute(HttpServletRequest request) {
-        return new Router(INDEX_PAGE);
+        return new Router(START_PAGE);
     }
 }

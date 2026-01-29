@@ -11,7 +11,7 @@
     <title>Register</title>
 </head>
 <body>
-    <form action="controller">
+    <form action="controller" method = "post">
         <input type="hidden" name="command" value="add_user"/>
         Name: <input type="text" name="register_userName" value=""/>
         <br/>
@@ -21,7 +21,14 @@
         <br/>
         <input type="submit" name="regUser" value="Register user"/>
         <br/>
-        ${register_msg}
+
+
     </form>
+    <form action="logout.do">
+        <input type="hidden" name="command" value="logout"/>
+        <input type="submit" name="out" value="Log in">
+    </form>
+    <br/>
+    ${register_msg}
 </body>
 </html>

@@ -11,15 +11,13 @@ public class LogoutCommand implements Command {
     private static final Logger logger = LogManager.getLogger(LogoutCommand.class);
 
 
-    private static final String PAGE = "pages/start.jsp";
+    private static final String START_PAGE = "/";
 
     @Override
     public Router execute(HttpServletRequest request) {
         logger.info("Use Logout Command");
         request.getSession().invalidate();
-        Router router = new Router(request.getContextPath() + "/" + PAGE);
-        //если поменять на forward то этот путь работать не будет "request.getContextPath() + "/" + PAGE"
-        //и почему вообще не работает без request.getContextPath() и /
+        Router router = new Router(START_PAGE);
         router.setRedirect();
         return router;
     }

@@ -16,8 +16,8 @@ public class AddUserCommand implements Command {
     private static final Logger logger = LogManager.getLogger(AddUserCommand.class);
 
 
-    private static final String REGISTRATION_PAGE = "pages/register.jsp";
-    private static final String MAIN_PAGE = "pages/main.jsp";
+    private static final String REGISTRATION_PAGE = "/pages/register.jsp";
+    private static final String MAIN_PAGE = "/pages/main.jsp";
 
 
     @Override

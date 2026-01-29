@@ -15,7 +15,7 @@ Hello (forward) = ${user}
 <br/>
 Hi (redirect/forward) = ${user_login}
 <br/>
-<form action="logout.do">
+<form action="logout.do" method="post">
     <input type="hidden" name="command" value="logout"/>
     <input type="submit" name="out" value="Logout">
 </form>

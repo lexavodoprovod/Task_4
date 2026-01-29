@@ -27,6 +27,11 @@ public class UserMapperImpl implements EntityMapper<User> {
                 .setLogin(rs.getString(EMAIL))
                 .setPassword(rs.getString(PASSWORD))
                 .build();
+
+        if(rs.getString(ROLE).equals(UserRole.ADMIN.name())){
+            user.setAdminRole();
+            logger.info("User \"{}\" has ADMIN status", user.getLogin());
+        }
         logger.info("Successfully called UserMapperImpl for User: {}", user.getLogin());
         return user;
     }
