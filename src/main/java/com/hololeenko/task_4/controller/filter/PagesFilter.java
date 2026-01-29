@@ -20,7 +20,7 @@ public class PagesFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         HttpSession session = request.getSession();
 
-        if(session != null && session.getAttribute("user_role") != null){
+        if(session != null){
             filterChain.doFilter(servletRequest, servletResponse);
         }else{
             response.sendRedirect(request.getContextPath() + START_PAGE);

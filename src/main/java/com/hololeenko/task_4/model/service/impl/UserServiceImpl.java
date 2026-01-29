@@ -6,6 +6,7 @@ import com.hololeenko.task_4.model.dao.impl.UserDaoImpl;
 import com.hololeenko.task_4.model.entity.User;
 import com.hololeenko.task_4.model.entity.UserRole;
 import com.hololeenko.task_4.model.service.UserService;
+import com.hololeenko.task_4.util.PasswordEncryptor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -27,6 +28,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public Optional<User> authenticate(String login, String password) throws ServiceException {
 
+        if(login.isEmpty() || password.isEmpty()){
+            return Optional.empty();
+        }
+
         UserDaoImpl userDaoImpl = UserDaoImpl.getInstance();
         Optional<User> optionalUser;
 
@@ -41,10 +46,13 @@ public class UserServiceImpl implements UserService {
             User user = optionalUser.get();
             logger.info("User with login {} was found, user_name is {}", login, user.getName());
             String userPassword = user.getPassword();
-            if (userPassword.equals(password)) {
+
+            if(PasswordEncryptor.checkPassword(password, userPassword)){
                 logger.info("Successfully logged in!");
                 return optionalUser;
             }
+            logger.error("Incorrect password!");
+
         }
 
         return Optional.empty();
@@ -75,10 +83,12 @@ public class UserServiceImpl implements UserService {
 
 
         if(optionalUser.isEmpty()){
+            String hashedPassword = PasswordEncryptor.encrypt(password);
+
             User user = new User.UserBuilder()
                     .setName(userName)
                     .setLogin(login)
-                    .setPassword(password)
+                    .setPassword(hashedPassword)
                     .build();
             try {
                 success = userDao.create(user);
