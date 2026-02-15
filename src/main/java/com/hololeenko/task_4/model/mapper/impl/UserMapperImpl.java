@@ -28,7 +28,7 @@ public class UserMapperImpl implements EntityMapper<User> {
                 .setPassword(rs.getString(PASSWORD))
                 .build();
 
-        if(rs.getString(ROLE).equals(UserRole.ADMIN.name())){
+        if(UserRole.ADMIN.name().equals(rs.getString(ROLE))){
             user.setAdminRole();
             logger.info("User \"{}\" has ADMIN status", user.getLogin());
         }

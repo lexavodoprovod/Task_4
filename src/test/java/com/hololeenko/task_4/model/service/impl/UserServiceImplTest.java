@@ -3,15 +3,14 @@ package com.hololeenko.task_4.model.service.impl;
 import com.hololeenko.task_4.exception.DaoException;
 import com.hololeenko.task_4.exception.ServiceException;
 import com.hololeenko.task_4.model.dao.UserDao;
-import com.hololeenko.task_4.model.dao.impl.UserDaoImpl;
 import com.hololeenko.task_4.model.entity.User;
-import com.hololeenko.task_4.model.service.UserService;
 import com.hololeenko.task_4.util.PasswordEncryptor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.MockedStatic;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -93,7 +92,6 @@ class UserServiceImplTest {
         Optional<User> result = userService.authenticate(login, password);
 
         assertTrue(result.isEmpty());
-
     }
 
     @Test
@@ -110,6 +108,44 @@ class UserServiceImplTest {
         boolean result = userService.register(userName, login, password);
 
         assertTrue(result);
+    }
+
+    @Test
+    @DisplayName("Should return false because user already exist")
+    void registerExistedUser() throws DaoException, ServiceException{
+        String userName = "TestUser";
+        String login = "testUser";
+        String password = "testPassword";
+
+        when(userDaoMock.findUserByLogin(login)).thenReturn(Optional.of(mock(User.class)));
+
+        boolean result = userService.register(userName, login, password);
+
+        verify(userDaoMock, never()).create(any(User.class));
+        assertFalse(result);
+    }
+
+    @Test
+    @DisplayName("Should get all users from database")
+    void getAllUsers() throws DaoException, ServiceException{
+        List<User> list = List.of(mock(User.class), mock(User.class));
+        when(userDaoMock.findAll()).thenReturn(list);
+
+        List<User> users = userService.getAllUsers();
+
+        assertNotNull(users, "users List is null");
+        assertEquals(2, users.size());
+        assertEquals(list, users);
+
+        verify(userDaoMock, times(1)).findAll();
+    }
+
+    @Test
+    @DisplayName("Should throw ServiceException when DaoException occurs")
+    void getAllUsersWithException() throws DaoException, ServiceException{
+       when(userDaoMock.findAll()).thenThrow(new DaoException("Something wrong with db"));
+
+       assertThrows(ServiceException.class, () -> userService.getAllUsers());
     }
 
 
