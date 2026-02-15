@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class UserDaoImpl implements UserDao, BaseDao<User> {
+public class UserDaoImpl implements UserDao{
 
     private static final Logger logger = LogManager.getLogger(UserDaoImpl.class);
     private static final UserMapperImpl userMapper = new UserMapperImpl();
@@ -83,6 +83,8 @@ public class UserDaoImpl implements UserDao, BaseDao<User> {
         }catch (SQLException e){
             logger.error("Exception in findUserById");
             throw new DaoException("SQl error in findUserById", e);
+        }finally {
+            ConnectionPool.getInstance().releaseConnection(connection);
         }
         return Optional.empty();
     }

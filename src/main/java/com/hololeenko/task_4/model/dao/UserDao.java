@@ -7,7 +7,7 @@ import com.hololeenko.task_4.model.entity.User;
 import java.util.List;
 import java.util.Optional;
 
-public interface UserDao {
+public interface UserDao extends BaseDao<User>{
     Optional<User> findUserById(int id) throws DaoException;
     Optional<User> findUserByLogin(String login) throws DaoException;
 }

@@ -2,9 +2,9 @@ package com.hololeenko.task_4.model.service.impl;
 
 import com.hololeenko.task_4.exception.DaoException;
 import com.hololeenko.task_4.exception.ServiceException;
+import com.hololeenko.task_4.model.dao.UserDao;
 import com.hololeenko.task_4.model.dao.impl.UserDaoImpl;
 import com.hololeenko.task_4.model.entity.User;
-import com.hololeenko.task_4.model.entity.UserRole;
 import com.hololeenko.task_4.model.service.UserService;
 import com.hololeenko.task_4.util.PasswordEncryptor;
 import org.apache.logging.log4j.LogManager;
@@ -19,7 +19,14 @@ public class UserServiceImpl implements UserService {
 
     private static final UserServiceImpl instance = new UserServiceImpl();
 
+    private final UserDao userDao;
+
     private UserServiceImpl() {
+        userDao = UserDaoImpl.getInstance();
+    }
+
+    public UserServiceImpl(UserDao userDao) {
+        this.userDao = userDao;
     }
 
     public static UserServiceImpl getInstance() {
@@ -32,11 +39,10 @@ public class UserServiceImpl implements UserService {
             return Optional.empty();
         }
 
-        UserDaoImpl userDaoImpl = UserDaoImpl.getInstance();
         Optional<User> optionalUser;
 
         try {
-            optionalUser = userDaoImpl.findUserByLogin(login);
+            optionalUser = userDao.findUserByLogin(login);
         } catch (DaoException e) {
             logger.error("Exception while trying to find user with login in authenticate\"{}\", Exception: {}", login, e.getMessage());
             throw new ServiceException(e);
@@ -67,7 +73,6 @@ public class UserServiceImpl implements UserService {
             return false;
         }
 
-        UserDaoImpl userDao = UserDaoImpl.getInstance();
 
         Optional<User> optionalUser;
 
@@ -104,11 +109,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> getAllUsers() throws ServiceException {
-        UserDaoImpl userDaoImpl = UserDaoImpl.getInstance();
         List<User> users;
 
         try {
-            users = userDaoImpl.findAll();
+            users = userDao.findAll();
         } catch (DaoException e) {
             logger.error("Exception while trying to find all users, Exception: {}", e.getMessage());
             throw new ServiceException(e);

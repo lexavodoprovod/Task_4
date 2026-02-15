@@ -11,9 +11,7 @@
     <title>Main</title>
 </head>
 <body>
-Hello (forward) = ${user}
-<br/>
-Hi (redirect/forward) = ${user_login}
+Welcome to app ${user_login}
 <br/>
 <form action="logout.do" method="post">
     <input type="hidden" name="command" value="logout"/>

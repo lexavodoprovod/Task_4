@@ -9,6 +9,8 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
+import static com.hololeenko.task_4.command.ConstantAttribute.*;
+
 @WebFilter(urlPatterns = {"/pages/admin.jsp/*", "/pages/all_users.jsp/*"})
 public class RoleFilter implements Filter {
 
@@ -23,7 +25,7 @@ public class RoleFilter implements Filter {
         UserRole role = null;
 
         if(session != null){
-            role = (UserRole) session.getAttribute("user_role");
+            role = (UserRole) session.getAttribute(USER_ROLE);
         }
 
         if(role == UserRole.ADMIN){
