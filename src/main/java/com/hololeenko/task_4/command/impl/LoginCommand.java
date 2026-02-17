@@ -23,6 +23,12 @@ public class LoginCommand implements Command {
 
     private static final Logger logger = LogManager.getLogger();
 
+    private final UserService userService;
+
+    public LoginCommand(UserService userService) {
+        this.userService = userService;
+    }
+
 
     @Override
     public Router execute(HttpServletRequest request) throws CommandException {
@@ -30,7 +36,7 @@ public class LoginCommand implements Command {
         String login = request.getParameter(AUTHENTICATE_LOGIN);
         String password = request.getParameter(AUTHENTICATE_PASS);
 
-        UserService userService = UserServiceImpl.getInstance();
+//        UserService userService = UserServiceImpl.getInstance();
 
         HttpSession session = request.getSession();
 

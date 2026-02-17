@@ -1,14 +1,15 @@
 package com.hololeenko.task_4.command;
 
 import com.hololeenko.task_4.command.impl.*;
+import com.hololeenko.task_4.model.service.impl.UserServiceImpl;
 
 public enum CommandType {
-    ADD_USER(new AddUserCommand()),
-    LOGIN(new LoginCommand()),
+    ADD_USER(new AddUserCommand(UserServiceImpl.getInstance())),
+    LOGIN(new LoginCommand(UserServiceImpl.getInstance())),
     LOGOUT(new LogoutCommand()),
     DEFAULT(new DefaultCommand()),
     GO_TO_REGISTRATION(new GoToRegistrationCommand()),
-    SHOW_USERS(new ShowUsersCommand());
+    SHOW_USERS(new ShowUsersCommand(UserServiceImpl.getInstance()));
 
     Command command;
 

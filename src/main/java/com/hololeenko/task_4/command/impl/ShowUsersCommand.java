@@ -21,12 +21,16 @@ import java.util.List;
 public class ShowUsersCommand implements Command {
 
     private static final Logger logger = LogManager.getLogger();
+    private final UserService userService;
 
+    public ShowUsersCommand(UserService userService) {
+        this.userService = userService;
+    }
 
     @Override
     public Router execute(HttpServletRequest request) throws CommandException {
         logger.info("use ShowUsersCommand");
-        UserService userService = UserServiceImpl.getInstance();
+//        UserService userService = UserServiceImpl.getInstance();
         try {
             List<User> users = userService.getAllUsers();
             request.setAttribute(USER_LIST, users);

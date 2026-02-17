@@ -18,6 +18,13 @@ import static com.hololeenko.task_4.command.ConstantAttribute.*;
 public class AddUserCommand implements Command {
 
     private static final Logger logger = LogManager.getLogger(AddUserCommand.class);
+
+    private final UserService userService;
+
+    public AddUserCommand(UserService userService) {
+        this.userService = userService;
+    }
+
     @Override
     public Router execute(HttpServletRequest request) throws CommandException {
         logger.info("Use AddUserCommand");
@@ -26,7 +33,7 @@ public class AddUserCommand implements Command {
         String login = request.getParameter(REGISTER_LOGIN);
         String password = request.getParameter(REGISTER_PASS);
 
-        UserService userService = UserServiceImpl.getInstance();
+//        UserService userService = UserServiceImpl.getInstance();
 
         HttpSession session = request.getSession();
 
